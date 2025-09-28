@@ -1,0 +1,157 @@
+# 🎵 Spotify Data Engineering Project
+
+This project demonstrates an **end-to-end data engineering pipeline** using the **Spotify API**, **Python**, **Supabase/MySQL**, and **Streamlit**.
+It extracts track metadata, transforms it with simple business logic, loads it into a database, and provides analytics dashboards.
+
+---
+
+## 🚀 Tech Stack
+
+* **Python** – Data extraction, transformation, and loading
+* **Spotify API (Spotipy)** – Source of music metadata
+* **Supabase (Postgres) / MySQL** – Data warehouse for storage
+* **Pandas** – Data handling and cleaning
+* **Matplotlib / Streamlit** – Visualizations and dashboard
+* **SQL** – Schema design and analytics queries
+
+---
+
+## 📂 Project Structure
+
+```
+spotify_data_analytics/
+│── dashboard.py               # Streamlit dashboard (analytics & visualizations)
+│── spotify_mysql_urls.py      # ETL pipeline (Extract → Transform → Load)
+│── spotify_schema_queries.sql # DB schema & SQL analytics queries
+│── track_urls.txt             # Input file containing Spotify track URLs
+│── spotify_tracks_data.csv    # Processed dataset (for quick demo)
+│── requirements.txt           # Python dependencies
+│── README.md                  # Project documentation
+```
+
+---
+
+## 🔄 ETL Pipeline Flow
+
+1. **Extract**
+
+   * Read track URLs from `track_urls.txt`.
+   * Fetch metadata (track name, artist, album, popularity, duration, etc.) using the **Spotify API**.
+
+2. **Transform**
+
+   * Calculate `duration_minutes`.
+   * Categorize `popularity` as `High / Medium / Low`.
+   * Categorize `duration` as `Short / Medium / Long`.
+   * Add timestamp `inserted_at`.
+
+3. **Load**
+
+   * Insert into **Supabase (Postgres)** or **MySQL**.
+   * Prevent duplicate inserts by checking `track_id`.
+
+4. **Analytics & Visualization**
+
+   * Generate `.csv` for offline analysis.
+   * Run **SQL queries** for insights.
+   * Interactive dashboard using **Streamlit**.
+
+---
+
+## 📊 Example Queries (MySQL/Postgres)
+
+* Most popular track:
+
+  ```sql
+  select track_name, artist, album, popularity
+  from spotify_tracks
+  order by popularity desc
+  limit 1;
+  ```
+* Average popularity:
+
+  ```sql
+  select avg(popularity) as average_popularity
+  from spotify_tracks;
+  ```
+* Categorize popularity:
+
+  ```sql
+  select 
+      case 
+          when popularity >= 80 then 'Very Popular'
+          when popularity >= 50 then 'Popular'
+          else 'Less Popular'
+      end as popularity_range,
+      count(*) as track_count
+  from spotify_tracks
+  group by popularity_range;
+  ```
+
+---
+
+## 📈 Streamlit Dashboard Features
+
+* View latest raw data records
+* Top 5 tracks by popularity (bar chart)
+* Popularity category distribution
+* Duration category distribution
+* Top 5 artists by average track duration
+
+Run dashboard:
+
+```bash
+streamlit run dashboard.py
+```
+
+---
+
+## ⚡ How to Run
+
+1. Clone the repo:
+
+   ```bash
+   git clone https://github.com/your-username/spotify_data_analytics.git
+   cd spotify_data_analytics
+   ```
+2. Create a virtual environment & install dependencies:
+
+   ```bash
+   python -m venv .venv
+   .venv\Scripts\activate   # Windows
+   pip install -r requirements.txt
+   ```
+3. Add your Spotify API credentials in the script.
+4. Add track URLs to `track_urls.txt`.
+5. Run ETL script:
+
+   ```bash
+   python spotify_mysql_urls.py
+   ```
+6. Run Streamlit dashboard:
+
+   ```bash
+   streamlit run dashboard.py
+   ```
+
+---
+
+## 💡 Future Improvements
+
+* Automate pipeline with **Airflow/Prefect**
+* Handle larger datasets with **Spark**
+* Add streaming ingestion using **Kafka**
+* Deploy dashboard to **Streamlit Cloud / Heroku**
+
+---
+
+## 🎯 Key Takeaways
+
+This project simulates a **real-world data engineering workflow**:
+
+* Connecting to APIs (Spotify)
+* ETL (Extract, Transform, Load)
+* Database design and SQL analytics
+* Visualization with dashboards
+
+It’s designed to highlight **data engineering skills** in interviews and resumes.

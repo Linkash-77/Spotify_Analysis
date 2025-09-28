@@ -1,0 +1,11 @@
+# Virtual environment
+.venv/
+__pycache__/
+*.pyc
+
+# Spotipy cache
+.cache
+
+# OS files
+.DS_Store
+Thumbs.db
